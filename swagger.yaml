@@ -1,0 +1,184 @@
+openapi: 3.0.0
+info:
+  title: Buscador Local API
+  description: API escalable para búsquedas locales
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@buscadorlocal.com
+
+servers:
+  - url: http://localhost:3000/api
+    description: Servidor de desarrollo
+  - url: https://api.buscadorlocal.com/api
+    description: Servidor de producción
+
+paths:
+  /health:
+    get:
+      summary: Estado de salud del servicio
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Servicio funcionando correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: OK
+                  timestamp:
+                    type: string
+                    format: date-time
+                  uptime:
+                    type: number
+                  environment:
+                    type: string
+                  version:
+                    type: string
+
+  /search:
+    get:
+      summary: Buscar elementos
+      tags:
+        - Search
+      parameters:
+        - in: query
+          name: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100
+          description: Término de búsqueda
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+          description: Número máximo de resultados
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          description: Número de resultados a omitir
+        - in: query
+          name: category
+          schema:
+            type: string
+          description: Filtrar por categoría
+      responses:
+        '200':
+          description: Resultados de búsqueda
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SearchItem'
+                  total:
+                    type: integer
+                  limit:
+                    type: integer
+                  offset:
+                    type: integer
+        '400':
+          description: Parámetros inválidos
+        '429':
+          description: Demasiadas peticiones
+
+    post:
+      summary: Indexar datos
+      tags:
+        - Search
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/SearchItem'
+      responses:
+        '200':
+          description: Datos indexados correctamente
+
+  /search/suggestions:
+    get:
+      summary: Obtener sugerencias
+      tags:
+        - Search
+      parameters:
+        - in: query
+          name: query
+          required: true
+          schema:
+            type: string
+          description: Término para generar sugerencias
+      responses:
+        '200':
+          description: Lista de sugerencias
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: string
+
+components:
+  schemas:
+    SearchItem:
+      type: object
+      required:
+        - id
+        - title
+      properties:
+        id:
+          type: string
+          description: Identificador único
+        title:
+          type: string
+          description: Título del elemento
+        description:
+          type: string
+          description: Descripción del elemento
+        category:
+          type: string
+          description: Categoría del elemento
+        tags:
+          type: array
+          items:
+            type: string
+          description: Etiquetas asociadas
+        location:
+          type: object
+          properties:
+            lat:
+              type: number
+            lng:
+              type: number
+            address:
+              type: string
+        metadata:
+          type: object
+          additionalProperties: true
