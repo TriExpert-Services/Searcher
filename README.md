@@ -66,17 +66,17 @@ docker-compose up -d
 
 ### Búsqueda básica
 ```bash
-curl "http://localhost:3000/api/search?query=restaurante&limit=5"
+curl "http://localhost:3030/api/search?query=restaurante&limit=5"
 ```
 
 ### Búsqueda con filtros
 ```bash
-curl "http://localhost:3000/api/search?query=pizza&category=comida&limit=10&offset=0"
+curl "http://localhost:3030/api/search?query=pizza&category=comida&limit=10&offset=0"
 ```
 
 ### Indexar datos
 ```bash
-curl -X POST http://localhost:3000/api/search/index \
+curl -X POST http://localhost:3030/api/search/index \
   -H "Content-Type: application/json" \
   -d '{
     "data": [
@@ -98,7 +98,7 @@ curl -X POST http://localhost:3000/api/search/index \
 
 ### Obtener sugerencias
 ```bash
-curl "http://localhost:3000/api/search/suggestions?query=rest"
+curl "http://localhost:3030/api/search/suggestions?query=rest"
 ```
 
 ## ⚡ Rendimiento y Escalabilidad
@@ -129,9 +129,9 @@ Las variables de entorno se pueden configurar en `.env`:
 
 ```env
 NODE_ENV=production
-PORT=3000
+PORT=3030
 LOG_LEVEL=info
-CORS_ORIGINS=https://misitioweb.com
+CORS_ORIGINS=http://localhost:3030,https://misitioweb.com
 CACHE_TTL=600
 RATE_LIMIT_WINDOW=900000
 RATE_LIMIT_MAX=100
@@ -143,7 +143,7 @@ RATE_LIMIT_MAX=100
 ```bash
 # Configurar variables de entorno
 export NODE_ENV=production
-export PORT=3000
+export PORT=3030
 
 # Desplegar
 docker-compose -f docker-compose.yml up -d
