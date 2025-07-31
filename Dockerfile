@@ -5,7 +5,7 @@ WORKDIR /app
 
 # Copiar archivos de dependencias
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm ci
 
 # Copiar código fuente
 COPY . .
@@ -22,10 +22,12 @@ WORKDIR /app
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
 
+# Instalar solo dependencias de producción
+COPY package*.json ./
+RUN npm ci --only=production && npm cache clean --force
+
 # Copiar dependencias y código construido
-COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/swagger.yaml ./swagger.yaml
 
 # Crear directorio de logs
