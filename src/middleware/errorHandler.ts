@@ -9,9 +9,9 @@ export interface AppError extends Error {
 
 export const errorHandler = (
   err: AppError,
-  req: Request,
+  _req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ) => {
   let statusCode = err.statusCode || 500;
   let message = err.message || 'Error interno del servidor';
@@ -35,9 +35,9 @@ export const errorHandler = (
   logger.error('Error no manejado:', {
     error: err.message,
     stack: err.stack,
-    url: req.originalUrl,
-    method: req.method,
-    ip: req.ip
+    url: _req.originalUrl,
+    method: _req.method,
+    ip: _req.ip
   });
 
   // Respuesta al cliente

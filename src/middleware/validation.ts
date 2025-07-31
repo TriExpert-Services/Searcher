@@ -9,7 +9,7 @@ const searchSchema = z.object({
   category: z.string().optional()
 });
 
-export const validateSearch = (req: Request, res: Response, next: NextFunction) => {
+export const validateSearch = (req: Request, _res: Response, next: NextFunction) => {
   try {
     const validatedQuery = searchSchema.parse(req.query);
     req.query = validatedQuery as any;

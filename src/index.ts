@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(rateLimiter);
 
 // Logging
-app.use((req, res, next) => {
+app.use((req, _res, next) => {
   logger.info(`${req.method} ${req.path}`, {
     ip: req.ip,
     userAgent: req.get('User-Agent')

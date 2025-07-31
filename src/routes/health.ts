@@ -3,7 +3,7 @@ import { asyncHandler } from '../middleware/errorHandler.js';
 
 const router = Router();
 
-router.get('/', asyncHandler(async (req, res) => {
+router.get('/', asyncHandler(async (_req: Request, res: Response) => {
   const healthCheck = {
     status: 'OK',
     timestamp: new Date().toISOString(),
@@ -15,7 +15,7 @@ router.get('/', asyncHandler(async (req, res) => {
   res.json(healthCheck);
 }));
 
-router.get('/ready', asyncHandler(async (req, res) => {
+router.get('/ready', asyncHandler(async (_req: Request, res: Response) => {
   // Aquí puedes agregar checks de dependencias (DB, servicios externos, etc.)
   res.json({ status: 'Ready' });
 }));

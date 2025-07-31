@@ -66,7 +66,7 @@ export const searchController = {
     });
   },
 
-  async clearIndex(req: Request, res: Response) {
+  async clearIndex(_req: Request, res: Response) {
     await searchService.clearIndex();
     
     logger.info('Índice limpiado');
